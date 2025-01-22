@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 
 
-export const sequelize = new Sequelize('postgres://myuser:mypassword@postgres:5432/mydatabase');
+export const sequelize = new Sequelize('postgres://donate:mypassword@postgres:5432/mydatabase');
 
 
 sequelize.authenticate()

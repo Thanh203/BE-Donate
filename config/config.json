@@ -1,6 +1,6 @@
 {
   "development": {
-    "username": "myuser",
+    "username": "donate",
     "password": "mypassword",
     "database": "mydatabase",
     "host": "localhost", 
@@ -8,7 +8,7 @@
     "port": 5433  
   },
   "test": {
-    "username": "myuser",
+    "username": "donate",
     "password": "mypassword",
     "database": "mydatabase",
     "host": "localhost", 
@@ -16,7 +16,7 @@
     "port": 5433  
   },
   "production": {
-    "username": "myuser",
+    "username": "donate",
     "password": "mypassword",
     "database": "mydatabase",
     "host": "localhost", 

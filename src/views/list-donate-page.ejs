@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Corona Admin</title>
+  <link rel="stylesheet" href="../../assets/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../../assets/vendors/css/vendor.bundle.base.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="shortcut icon" href="../../assets/images/favicon.png" />
+</head>
+
+<body>
+  <div class="container-scroller">
+    <%- include('./include/dashboard.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <!-- <%- include('./include/headerbar.ejs') %> -->
+          <div class="main-panel">
+            <div class="content-wrapper">
+              <div class="page-header">
+                <h3 class="page-title">Danh sách quyên góp</h3>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="summary">
+                        <h5>Tổng số tiền quyên góp: <span id="totalAmount">0</span> VND</h5>
+                        <h5>Tổng số người quyên góp: <span id="totalDonates">0</span></h5>
+                      </div>
+                      <button id="addDonateBtn" class="btn btn-primary">Thêm quyên góp</button>
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-contextual" id="donateTable">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Tên</th>
+                              <th>Địa chỉ</th>
+                              <th>Tiền</th>
+                              <th>Người nhận</th>
+                              <th>Hành động</th>
+                            </tr>
+                          </thead>
+                          <tbody id="donateTableBody">
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+  <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
+  <script src="../../assets/js/off-canvas.js"></script>
+  <script src="../../assets/js/hoverable-collapse.js"></script>
+  <script src="../../assets/js/misc.js"></script>
+  <script src="../../assets/js/settings.js"></script>
+  <script src="../../assets/js/todolist.js"></script>
+  <script>
+    document.getElementById("addDonateBtn").addEventListener("click", function () {
+      window.location.href = "/donate-form";
+    });
+  </script>
+  <tbody id="donateTableBody">
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const response = await fetch("/donatelist");
+        const data = await response.json();
+
+        if (data.success) {
+          const donates = data.data;
+          const totalAmount = data.totalAmount;
+          const totalDonates = data.totalDonates;
+          const tableBody = document.getElementById("donateTableBody");
+
+          document.getElementById("totalAmount").textContent = totalAmount.toLocaleString('vi-VN');
+          document.getElementById("totalDonates").textContent = totalDonates;
+
+          donates.forEach((donate, index) => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${donate.name}</td>
+                <td>${donate.address}</td>
+                <td>${donate.amount.toLocaleString('vi-VN')}</td>
+                <td>${donate.holder}</td>
+                <td>
+                  <button class="btn btn-danger" onclick="deleteDonate(${donate.id})">Xóa</button>
+                </td>
+              `;
+
+            tableBody.appendChild(row);
+          });
+        } else {
+          const tableBody = document.getElementById("donateTableBody");
+          const row = document.createElement("tr");
+          row.innerHTML = `<td colspan="6" class="text-center">Không có dữ liệu quyên góp</td>`;
+          tableBody.appendChild(row);
+        }
+      });
+
+      async function deleteDonate(id) {
+        const response = await fetch(`/donates/${id}`, {
+          method: "DELETE"
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          alert("Xóa donate thành công!");
+          location.reload();
+        } else {
+          alert("Có lỗi xảy ra!");
+        }
+      }
+    </script>
+  </tbody>
+
+</body>
+
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Corona Admin</title>
+    <link rel="stylesheet" href="../assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="../assets/vendors/select2/select2.min.css">
+    <link rel="stylesheet" href="../assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="shortcut icon" href="../assets/images/favicon.png" />
+    <style>
+        .form-control {
+            background-color: white;
+            color: black;
+        }
+
+        .form-control::placeholder {
+            color: grey;
+        }
+
+        .form-control {
+            background-color: white;
+            color: black;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        .form-control:focus {
+            background-color: white;
+            color: black;
+            border-color: #80bdff;
+            box-shadow: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-scroller">
+        <%- include('./include/dashboard.ejs') %>
+            <div class="container-fluid page-body-wrapper">
+                <!-- <%- include('./include/headerbar.ejs') %> -->
+                <div class="main-panel">
+                    <div class="content-wrapper">
+                        <div class="page-header">
+                            <h3 class="page-title"> Nhập thông tin quyên góp </h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 grid-margin stretch-card">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form class="forms-sample" action="/donates" method="post">
+                                            <div class="form-group">
+                                                <label for="donateName">Tên người gửi</label>
+                                                <input type="text" class="form-control" id="donateName"
+                                                    placeholder="Enter name" name="name" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="donateAddress">Địa chỉ</label>
+                                                <input type="text" class="form-control" id="donateAddress"
+                                                    placeholder="Enter address" name="address" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="donateAmount">Số tiền</label>
+                                                <input type="number" class="form-control" id="donateAmount"
+                                                    placeholder="Enter amount" name="amount" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="donateHolder">Người nhận</label>
+                                                <input type="text" class="form-control" id="donateHolder"
+                                                    placeholder="Enter holder name" name="holder" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary me-2">Lưu</button>
+                                            <button type="reset" class="btn btn-dark">Huỷ bỏ</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="../assets/vendors/select2/select2.min.js"></script>
+    <script src="../assets/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="../assets/js/off-canvas.js"></script>
+    <script src="../assets/js/hoverable-collapse.js"></script>
+    <script src="../assets/js/misc.js"></script>
+    <script src="../assets/js/settings.js"></script>
+    <script src="../assets/js/todolist.js"></script>
+    <script src="../assets/js/file-upload.js"></script>
+    <script src="../assets/js/typeahead.js"></script>
+    <script src="../assets/js/select2.js"></script>
+    <script>
+        document.querySelector('form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+
+            const response = await fetch(e.target.action, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert(result.message);
+                window.location.href = '/list-donate';
+            } else {
+                alert('Có lỗi xảy ra: ' + result.message);
+            }
+        });
+
+    </script>
+</body>
+
+</html>
